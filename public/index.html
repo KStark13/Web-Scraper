@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Scraping With Mongoose</title>
+    <!-- Bootstrap link -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- style sheet -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+
+
+  <body>
+  <!--   nav bar -->
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Mongo Scraper</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/saved">Saved Articles</a></li>
+            <li><button type="button" id="scrape" class="btn btn-danger" >Scrape Articles</button></li>
+          </ul>
+       </div>
+      </div>
+    </nav>
+    <!-- jumbotron -->
+    <div class="jumbotron text-center">
+      <div class="background-image">
+      </div>
+      <div class="heading-title">
+        <h1>Mongo Scraper</h1>
+        <p>BBC Edition</p>
+      </div>
+    </div>
+      <div id="articles"></div>
+      <div id="notes"></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
