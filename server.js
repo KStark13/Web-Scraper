@@ -51,33 +51,50 @@ db.once("open", function() {
 });
 
 //ROUTES
+//Routes to render handlebars pages
 app.get("/",function(req,res){
-	res.render("home")
+	Article.find({"saved": false}, function(error, date) {
+		var hbsObject = {
+			article: data
+		};
+		console.log(hbsObject);
+		res.render("home", hbsObject)
+	});
+});
+
+app.get("/saved", function(req,res) {
+	Article.find({"saved": true}).populate("notes").exec(function(error, articles) {
+		var hbsObject = {
+			article: articles
+		};
+		res.render("saved", hbsObject)
+	})
 })
-//A GET route for scraping the NPR website
+//A GET route for scraping the New York Times website
 app.get("/scrape", function(req, res){
 	request("http://nytimes.com", function (error, response, html) {
 		//We load that into cheerio and save to $ for a shorthand selector
 		var $ = cheerio.load(html);
 		//Grab every h2 within an article tag
-		$("article h2").each(function(i, element){
+		$("article").each(function(i, element){
+			//Save an empty result object
 			var result = {};
-			result.title = $(this)
-				.children("a")
-				.text();
-			result.link = $(this)
-				.children("a")
-				.attr("href");
-			//Create a new article using the result object built from scrape
-			db.article
-			.create(result)
-			.then(function(dbArticle) {
-				//view result in console
-				console.log(dbArticle);
-			})
-			.catch(function(err) {
-				//if an error occurred, send it to the client
-				return res.json(err);
+			//Add the title and link, and save them as properties of result object
+			result.title = $(this).children("h2").text();
+			result.summary = $(this).children("summary").text();
+			result.link = $(this).children("h2").children("a").attr("href");
+
+			//Use the Article model, create a new entry
+			var entry = new Article(result);
+
+			//Save entry to the db
+			entry.save(function(err, doc){
+				//Log errors
+				if(err) {
+					console.log(err);
+				} else{
+					console.log(doc);
+				}
 			});
 		});
 		//If we successfully scrape and save an article, send a message to the client
